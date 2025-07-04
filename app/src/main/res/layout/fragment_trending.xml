@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Components.trending">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/home_bg">
+
+        <!-- Trending Images Section -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/trending_section"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/trending_image"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/logo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.189"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/RoundedImage" />
+
+            <TextView
+                android:id="@+id/friday_party_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Friday Party"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/friday_party_subtitle"
+                app:layout_constraintStart_toStartOf="@+id/trending_image"
+                app:layout_constraintEnd_toEndOf="@+id/trending_image" />
+
+            <TextView
+                android:id="@+id/friday_party_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Party mood !"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/trending_image"
+                app:layout_constraintStart_toStartOf="@+id/trending_image"
+                app:layout_constraintEnd_toEndOf="@+id/trending_image"
+                android:layout_marginBottom="16dp" />
+
+            <ImageView
+                android:id="@+id/friday_play_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/play_circle_24"
+
+                app:layout_constraintBottom_toBottomOf="@+id/trending_image"
+                app:layout_constraintEnd_toEndOf="@+id/trending_image"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/trending_image2"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/logo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.842"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/RoundedImage" />
+
+            <TextView
+                android:id="@+id/saturday_party_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saturday Party"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/saturday_party_subtitle"
+                app:layout_constraintStart_toStartOf="@+id/trending_image2"
+                app:layout_constraintEnd_toEndOf="@+id/trending_image2" />
+
+            <TextView
+                android:id="@+id/saturday_party_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Party mood !"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/trending_image2"
+                app:layout_constraintStart_toStartOf="@+id/trending_image2"
+                app:layout_constraintEnd_toEndOf="@+id/trending_image2"
+                android:layout_marginBottom="16dp" />
+
+            <ImageView
+                android:id="@+id/saturday_play_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/play_circle_24"
+
+                app:layout_constraintBottom_toBottomOf="@+id/trending_image2"
+                app:layout_constraintEnd_toEndOf="@+id/trending_image2"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Recently Play Section -->
+        <LinearLayout
+            android:id="@+id/recently_play_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/trending_section">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Recently Play"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="See all"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recently_play_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recently_play_header"
+            >
+
+
+           </androidx.recyclerview.widget.RecyclerView>
+<!--            tools:listitem="@layout/item_song" />-->
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
