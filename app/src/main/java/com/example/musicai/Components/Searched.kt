@@ -60,7 +60,9 @@ class Searched(private val songs: List<Song>,private val setUrl: (String) -> Uni
         lifecycleScope.launch {
             recyclerview = view.findViewById<RecyclerView>(R.id.recyclerViewMusic)
             recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false);
-            recyclerview.adapter = SearchViewAdapter(songs,mainTabLayout,setUrl);
+            recyclerview.adapter = SearchViewAdapter(songs,mainTabLayout,setUrl,
+                lifecycleScope
+            );
         }
 
 
