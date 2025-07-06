@@ -39,7 +39,7 @@ android {
 }
 
 dependencies {
-
+    implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("io.ktor:ktor-client-core:2.3.4")
     implementation("io.ktor:ktor-client-cio:2.3.4")
     implementation("io.ktor:ktor-client-content-negotiation:2.3.4")

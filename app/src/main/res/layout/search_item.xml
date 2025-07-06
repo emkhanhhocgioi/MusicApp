@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:background="@color/custom_grey"
+    android:layout_marginBottom="8dp"
+    android:gravity="center_vertical">
+
+        <!-- Album Art -->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageAlbumArt"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="12dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo"
+            app:shapeAppearanceOverlay="@style/RoundedImageView"/>
+
+        <!-- Song Info Container -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginEnd="12dp">
+
+            <!-- Song Title -->
+            <TextView
+                android:id="@+id/textSongTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Music Rock"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <!-- Artist Name -->
+            <TextView
+                android:id="@+id/textArtistName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lorem ipsum dolor sit amet"
+                android:textColor="#AAAAAA"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <!-- Duration -->
+            <TextView
+                android:id="@+id/textDuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="3:24"
+                android:textColor="#888888"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <!-- Play Button -->
+        <ImageButton
+            android:id="@+id/buttonPlay"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/play_circle_24"
+
+            android:scaleType="centerInside"
+            android:padding="12dp"
+            android:contentDescription="Play song" />
+
+    </LinearLayout>
+

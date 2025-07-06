@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.musicai.ClassProps.CurrentUser
+import com.example.musicai.ClassProps.ReturnUsers
 import com.example.musicai.R
 import com.example.musicai.main.home.HomeActivity
 import com.google.android.material.button.MaterialButton
@@ -19,6 +21,8 @@ import io.ktor.client.request.setBody
 import io.ktor.http.contentType
 import io.ktor.serialization.gson.gson
 import kotlinx.coroutines.launch
+import com.google.gson.Gson
+import io.ktor.client.call.body
 
 class Login : AppCompatActivity() {
 
@@ -68,6 +72,15 @@ class Login : AppCompatActivity() {
             setBody(LoginRequest(email, password))
         }
         if (response.status == io.ktor.http.HttpStatusCode.OK) {
+            val user = response.body<ReturnUsers>();
+            CurrentUser.username = user.username;
+            CurrentUser.email = user.email;
+            CurrentUser.id = user.id;
+            CurrentUser.avatarUrl = user.avatarUrl;
+            CurrentUser.recentPlays = user.recentPlays;
+            CurrentUser.favorites = user.favorites;
+            CurrentUser.recnentSearches = user.recentSearches;
+
             startActivity(Intent(this, HomeActivity::class.java))
         } else if (response.status == io.ktor.http.HttpStatusCode.Unauthorized   ) {
             Toast.makeText(this,"Wrong user or password!" , Toast.LENGTH_SHORT).show();

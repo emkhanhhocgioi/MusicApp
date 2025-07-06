@@ -149,7 +149,7 @@
         android:id="@+id/login_button"
         android:layout_width="296dp"
         android:layout_height="48dp"
-        android:text="Create Account"
+        android:text="Sign In"
         app:backgroundTint="@color/custom_bg"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"

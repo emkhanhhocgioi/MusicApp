@@ -11,10 +11,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.musicai.R
-import com.example.musicai.api.RegisterRequset
+
 import com.example.musicai.main.home.HomeActivity
 import com.google.android.material.button.MaterialButton
-import com.example.musicai.api.RegisterUser
+
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
