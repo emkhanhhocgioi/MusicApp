@@ -5,27 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.LinearLayout
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleCoroutineScope
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicai.ClassProps.Song
 import com.example.musicai.R
 import com.example.musicai.adpter.SearchViewAdapter
-import com.example.musicai.api.Constant
-import io.ktor.http.*;
-import io.ktor.client.*
-import io.ktor.client.call.body
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.serialization.gson.gson
+import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.launch
 
 
@@ -39,13 +25,13 @@ private const val ARG_PARAM2 = "param2"
  * Use the [Searched.newInstance] factory method to
  * create an instance of this fragment.
  */
-class Searched(songs: List<Song>) : Fragment() {
+class Searched(private val songs: List<Song>,private val setUrl: (String) -> Unit) : Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
 
 
-    private val songs : List<Song> = songs;
+
 
     private lateinit var recyclerview : RecyclerView;
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,12 +52,15 @@ class Searched(songs: List<Song>) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val mainTabLayout = requireActivity().findViewById<TabLayout>(R.id.navigate_bar)
+
+
 
 
         lifecycleScope.launch {
             recyclerview = view.findViewById<RecyclerView>(R.id.recyclerViewMusic)
             recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false);
-            recyclerview.adapter = SearchViewAdapter(songs);
+            recyclerview.adapter = SearchViewAdapter(songs,mainTabLayout,setUrl);
         }
 
 
@@ -84,9 +73,10 @@ class Searched(songs: List<Song>) : Fragment() {
     companion object {
 
         @JvmStatic
-        fun newInstance(param1: String, param2: String,songs: List<Song> ) =
+        fun newInstance(param1: String, param2: String,songs: List<Song> ,setUrl: Unit) =
             Searched(
-                songs
+                songs,
+                {setUrl}
             ).apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)

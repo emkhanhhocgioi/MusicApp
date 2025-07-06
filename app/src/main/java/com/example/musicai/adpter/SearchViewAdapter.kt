@@ -5,10 +5,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.musicai.ClassProps.Song
 import com.example.musicai.R
+import com.google.android.material.tabs.TabLayout
 import java.lang.Exception
-import java.util.zip.Inflater
 
-open class SearchViewAdapter(private  val songs: List<Song>)  : RecyclerView.Adapter<SearchViewHolder>() {
+open class SearchViewAdapter(
+    private val songs: List<Song>,
+    private val tab: TabLayout,
+    private val setUrl: (String) -> Unit
+
+    )  : RecyclerView.Adapter<SearchViewHolder>() {
 
     override fun onCreateViewHolder(parent: android.view.ViewGroup, viewType: Int): SearchViewHolder {
         // Inflate the layout for the SearchViewHolder and return a new instance
@@ -20,6 +25,7 @@ open class SearchViewAdapter(private  val songs: List<Song>)  : RecyclerView.Ada
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         try {
+
             val currenSong = songs[position]
             holder.song_title.text = currenSong.title
             holder.song_artist.text = currenSong.artist
@@ -28,10 +34,26 @@ open class SearchViewAdapter(private  val songs: List<Song>)  : RecyclerView.Ada
             Glide.with(holder.itemView.context)
                 .load(currenSong.coverUrl)
                 .into(holder.song_cover)
+
+            holder.play_btn.setOnClickListener {
+                try {
+                    currenSong.externalUrl?.let {
+                        setUrl(it)
+                    }
+
+                    tab.getTabAt(2)?.select()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             println("Error in binding view holder: ${e.message}")
         }
+    }
+
+    suspend fun saveUserCurrentSong (songid :String , userid: String) {
+
     }
 
     override fun getItemCount(): Int {

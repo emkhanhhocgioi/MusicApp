@@ -27,8 +27,8 @@ class recomend : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private val testData: List<Song> = listOf(
-        Song("1", "Birth of Feather", "Billie", "Album", 240, "https://example.com/cover.jpg"),
-        Song("2", "Fly Away", "Billie", "Album", 210, "https://example.com/cover2.jpg")
+        Song("1", "Birth of Feather", "Billie", "Album", 240, "https://example.com/cover.jpg","https://example.com/cover.jpg"),
+        Song("2", "Fly Away", "Billie", "Album", 210, "https://example.com/cover2.jpg","https://example.com/cover.jpg")
     )
 
 

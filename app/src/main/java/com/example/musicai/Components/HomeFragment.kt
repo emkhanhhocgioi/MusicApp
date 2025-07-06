@@ -10,12 +10,8 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.getSystemService
-import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.replace
 import androidx.lifecycle.lifecycleScope
+import com.example.musicai.ClassProps.CurrentUser
 import com.example.musicai.ClassProps.Song
 import com.example.musicai.R
 import com.example.musicai.api.Constant
@@ -41,7 +37,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment(private val setUrl: (String) -> Unit) : Fragment(R.layout.fragment_home) {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -86,7 +82,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 lifecycleScope.launch {
                     val songs = getSearchList(query);
                     childFragmentManager.beginTransaction().apply {
-                        replace(R.id.tab_content_wrapper, Searched(songs)).commit();
+                        replace(R.id.tab_content_wrapper, Searched(songs,setUrl)).commit();
                     }
                 }
 
@@ -115,6 +111,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             val response = client.get("$baseurl/spotify/search") {
                 contentType(ContentType.Application.Json)
                 parameter("query", query ?: "")
+                parameter("userid", CurrentUser.id.toString() ?: "")
             }
             if ( response.status == HttpStatusCode.OK ) {
                 val songs = response.body<List<Song>>()
@@ -158,8 +155,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
+        fun newInstance(param1: String, param2: String,setUrl: Unit) =
+            HomeFragment({ setUrl }).apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

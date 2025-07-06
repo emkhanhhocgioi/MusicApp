@@ -39,6 +39,8 @@ android {
 }
 
 dependencies {
+
+    implementation("androidx.core:core-ktx:1.12.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("io.ktor:ktor-client-core:2.3.4")
     implementation("io.ktor:ktor-client-cio:2.3.4")
@@ -54,6 +56,7 @@ dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(files("../spotify-app-remote-release-0.8.0.aar"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -1,43 +1,26 @@
 package com.example.musicai.main.home
 
 import android.os.Bundle
-import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.musicai.ClassProps.Song
+import com.example.musicai.Components.AudioPlayer
 import com.example.musicai.Components.HomeFragment
 import com.example.musicai.Components.UserDetails
 import com.example.musicai.R
 import com.example.musicai.api.Constant
 import com.google.android.material.tabs.TabLayout
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.get
-import io.ktor.client.request.parameter
-import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.contentType
-import io.ktor.serialization.gson.gson
 
 class HomeActivity : AppCompatActivity() {
     private val baseurl = Constant.baseurl;
+
+    private var currentUrl: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_hom)
         val tab = findViewById<TabLayout>(R.id.navigate_bar)
-
         setTabIcons(tab)
-        val homeFrag = HomeFragment()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.tab_frame, homeFrag)
-            .commit()
-
-
-
-
+        tab.getTabAt(0)?.select()
 
 
     }
@@ -51,10 +34,15 @@ class HomeActivity : AppCompatActivity() {
         tab.getTabAt(4)?.setIcon(R.drawable.person_24)
 
 
+        fun setUrl(newString: String) {
+            currentUrl = newString
+        }
 
-        val homeFrag = HomeFragment()
+        val homeFrag = HomeFragment(::setUrl)
         val userFrag = UserDetails()
+
         tab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+
             override fun onTabSelected(tab: TabLayout.Tab) {
 
                 when (tab.position) {
@@ -67,7 +55,10 @@ class HomeActivity : AppCompatActivity() {
 
                     }
                     2 -> {
-                        // Handle Playlists tab selection
+                        val audioPlayer = AudioPlayer.newInstance("value1", "value2", currentUrl)
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.tab_frame, audioPlayer)
+                            .commit()
                     }
                     3 -> {
                         // Handle Downloads tab selection
@@ -105,10 +96,7 @@ class HomeActivity : AppCompatActivity() {
             }
         })
     }
-    fun getTestApi (){
 
-
-    }
 
 
 }
