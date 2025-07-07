@@ -39,13 +39,14 @@ class AudioPlayer : Fragment() {
 
         val webView = view.findViewById<WebView>(R.id.audio_webview)
         val iframeUrl = urlEx?.let { convertToEmbedUrl(it) }
-            ?: "https://open.spotify.com/embed/track/4nXrVH5xwN1w6TpmP7uu8n"
+            ?.let { "$it?autoplay=1" }
+            ?: "https://open.spotify.com/embed/track/4nXrVH5xwN1w6TpmP7uu8n?autoplay=1"
 
         val htmlContent = """
             <html>
             <body style="margin:0;padding:0;">
                 <iframe src="$iframeUrl"
-                        width="100%" height="80" frameborder="0"
+                        width="100%" height="100%" frameborder="0"
                         allowtransparency="true"
                         allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
                 </iframe>

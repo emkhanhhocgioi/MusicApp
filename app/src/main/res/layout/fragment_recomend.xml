@@ -11,8 +11,8 @@
         android:layout_height="match_parent"
         android:background="@color/home_bg">
 
-        <!-- Trending Images Section -->
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- Trending Images Section với RecyclerView -->
+        <FrameLayout
             android:id="@+id/trending_section"
             android:layout_width="match_parent"
             android:layout_height="120dp"
@@ -21,105 +21,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/trending_image"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/logo"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.189"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearanceOverlay="@style/RoundedImage" />
-
-            <TextView
-                android:id="@+id/friday_party_title"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/trending_recycler_view"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Friday Party"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/friday_party_subtitle"
-                app:layout_constraintStart_toStartOf="@+id/trending_image"
-                app:layout_constraintEnd_toEndOf="@+id/trending_image" />
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clipToPadding="false" />
 
-            <TextView
-                android:id="@+id/friday_party_subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Party mood !"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/trending_image"
-                app:layout_constraintStart_toStartOf="@+id/trending_image"
-                app:layout_constraintEnd_toEndOf="@+id/trending_image"
-                android:layout_marginBottom="16dp" />
-
-            <ImageView
-                android:id="@+id/friday_play_button"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/play_circle_24"
-
-                app:layout_constraintBottom_toBottomOf="@+id/trending_image"
-                app:layout_constraintEnd_toEndOf="@+id/trending_image"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp" />
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/trending_image2"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/logo"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.3"
-                app:layout_constraintHorizontal_bias="0.814"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="0.3"
-                app:shapeAppearanceOverlay="@style/RoundedImage" />
-
-            <TextView
-                android:id="@+id/saturday_party_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Saturday Party"
-                android:textColor="@android:color/white"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/saturday_party_subtitle"
-                app:layout_constraintStart_toStartOf="@+id/trending_image2"
-                app:layout_constraintEnd_toEndOf="@+id/trending_image2" />
-
-            <TextView
-                android:id="@+id/saturday_party_subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Party mood !"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/trending_image2"
-                app:layout_constraintStart_toStartOf="@+id/trending_image2"
-                app:layout_constraintEnd_toEndOf="@+id/trending_image2"
-                android:layout_marginBottom="16dp" />
-
-            <ImageView
-                android:id="@+id/saturday_play_button"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/play_circle_24"
-
-                app:layout_constraintBottom_toBottomOf="@+id/trending_image2"
-                app:layout_constraintEnd_toEndOf="@+id/trending_image2"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
 
         <!-- Recently Play Section -->
         <LinearLayout
@@ -152,7 +64,6 @@
 
         </LinearLayout>
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recomend_recycler_view"
             android:layout_width="match_parent"
@@ -166,12 +77,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recently_play_header">
 
-
-
-
-
         </androidx.recyclerview.widget.RecyclerView>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

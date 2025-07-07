@@ -14,6 +14,7 @@ import com.example.musicai.ClassProps.Song
 import com.example.musicai.R
 import com.example.musicai.adpter.SearchViewAdapter
 import com.example.musicai.adpter.SongAdapter
+import com.example.musicai.adpter.recomenedAdapter
 import com.example.musicai.api.Constant
 import com.google.android.material.tabs.TabLayout
 import io.ktor.client.HttpClient
@@ -48,7 +49,7 @@ class recomend (private val setUrl: (String) -> Unit) : Fragment() {
 
 
     private lateinit var recyclerview : RecyclerView;
-
+    private lateinit var recyclerview2 : RecyclerView;
     var songs : List<Song> = emptyList<Song>() ;
 
 
@@ -82,11 +83,16 @@ class recomend (private val setUrl: (String) -> Unit) : Fragment() {
             recyclerview = view.findViewById<RecyclerView>(R.id.recomend_recycler_view)
             recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
+            recyclerview2 = view.findViewById<RecyclerView>(R.id.trending_recycler_view);
+            recyclerview2.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             lifecycleScope.launch {
                 try {
                     val recentSongs = getListRecent()
+                    val recomendSongs = getListRecommend();
+
                     songs = recentSongs
                     recyclerview.adapter = SearchViewAdapter(songs, maintabLayout, setUrl, lifecycleScope)
+                    recyclerview2.adapter = recomenedAdapter(recomendSongs,maintabLayout, setUrl, lifecycleScope);
                 } catch (e: Exception) {
                     e.printStackTrace()
                     println("Error loading songs: ${e.message}")
@@ -128,7 +134,30 @@ class recomend (private val setUrl: (String) -> Unit) : Fragment() {
         return  null ?: emptyList<Song>()
     }
 
-
+    suspend fun getListRecommend() : List<Song> {
+        try {
+            val client = HttpClient(CIO) {
+                install(ContentNegotiation) {
+                    gson()
+                }
+            }
+            val response = client.get("$baseurl/spotify/recomended") {
+                contentType(ContentType.Application.Json)
+                parameter("userid", CurrentUser.id.toString() ?: "")
+            }
+            if (response.status == HttpStatusCode.OK) {
+                val songs = response.body<List<Song>>()
+                return songs
+            } else {
+                println("Error: ${response.status}")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            println("Error in getting recommend list: ${e.message}")
+            return emptyList();
+        }
+        return emptyList<Song>();
+    }
 
     companion object {
         /**

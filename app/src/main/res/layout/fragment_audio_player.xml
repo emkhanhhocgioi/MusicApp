@@ -15,44 +15,128 @@
         android:gravity="center"
         android:padding="40dp">
 
+        <!-- Header -->
+        <TextView
+            android:id="@+id/audio_player_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vibee Music audio player"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"
+            android:paddingBottom="16dp" />
+
         <!-- Compact Content Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="320dp"
             android:layout_height="wrap_content"
-
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp"
-            app:cardBackgroundColor="@color/custom_bg">
+            app:cardBackgroundColor="@color/custom_grey">
 
             <!-- Inner content with padding -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-
                 android:padding="8dp">
 
                 <!-- WebView with rounded corners -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="280dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp"
                     app:cardBackgroundColor="@color/home_bg">
 
-                    <WebView
-                        android:id="@+id/audio_webview"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/home_bg" />
+                        android:orientation="vertical">
 
+                        <WebView
+                            android:id="@+id/audio_webview"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:background="@color/home_bg" />
+
+                    </LinearLayout>
                 </androidx.cardview.widget.CardView>
+
+                <!-- Control Buttons Container -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="8dp">
+
+                    <!-- Favorite Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_favorite"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="16dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:padding="0dp"
+                        app:icon="@drawable/favorite_24"
+                        app:iconGravity="textStart"
+                        app:iconPadding="0dp"
+                        app:iconSize="24dp"
+
+                        app:cornerRadius="24dp"
+                        app:backgroundTint="@color/home_bg"
+
+                        app:strokeWidth="1dp"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+                    <!-- Auto Next Toggle Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_auto_next"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="16dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:padding="0dp"
+                        app:icon="@drawable/shuffle_24"
+                        app:iconGravity="textStart"
+                        app:iconPadding="0dp"
+                        app:iconSize="24dp"
+
+                        app:cornerRadius="24dp"
+                        app:backgroundTint="@color/home_bg"
+
+                        app:strokeWidth="1dp"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+                    <!-- Random/Shuffle Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_shuffle"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:padding="0dp"
+                        app:icon="@drawable/baseline_skip_next_24"
+                        app:iconGravity="textStart"
+                        app:iconPadding="0dp"
+                        app:iconSize="24dp"
+
+                        app:cornerRadius="24dp"
+                        app:backgroundTint="@color/home_bg"
+
+                        app:strokeWidth="1dp"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-
-
 
     </LinearLayout>
 
@@ -64,8 +148,6 @@
         android:gravity="center"
         android:paddingTop="32dp"
         android:paddingBottom="8dp">
-
-
 
     </LinearLayout>
 
