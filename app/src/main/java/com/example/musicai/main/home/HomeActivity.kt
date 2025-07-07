@@ -3,12 +3,15 @@ package com.example.musicai.main.home
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.musicai.ClassProps.Song
 import com.example.musicai.Components.AudioPlayer
 import com.example.musicai.Components.HomeFragment
 import com.example.musicai.Components.UserDetails
 import com.example.musicai.R
 import com.example.musicai.api.Constant
 import com.google.android.material.tabs.TabLayout
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
 
 class HomeActivity : AppCompatActivity() {
     private val baseurl = Constant.baseurl;
@@ -21,9 +24,15 @@ class HomeActivity : AppCompatActivity() {
         val tab = findViewById<TabLayout>(R.id.navigate_bar)
         setTabIcons(tab)
         tab.getTabAt(0)?.select()
-
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.tab_frame, HomeFragment(::setUrl))
+            .commit()
 
     }
+    fun setUrl(newString: String) {
+        currentUrl = newString
+    }
+
 
 
     fun setTabIcons(tab: TabLayout) {
@@ -34,9 +43,7 @@ class HomeActivity : AppCompatActivity() {
         tab.getTabAt(4)?.setIcon(R.drawable.person_24)
 
 
-        fun setUrl(newString: String) {
-            currentUrl = newString
-        }
+
 
         val homeFrag = HomeFragment(::setUrl)
         val userFrag = UserDetails()

@@ -94,8 +94,9 @@ class HomeFragment(private val setUrl: (String) -> Unit) : Fragment(R.layout.fra
         }
 
 
+
         childFragmentManager.beginTransaction().apply {
-            replace(R.id.recomend_trending_frame, recomend())
+            replace(R.id.recomend_trending_frame, recomend(setUrl))
             commit();
         }
     }

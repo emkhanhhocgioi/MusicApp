@@ -89,6 +89,8 @@ open class SearchViewAdapter(
         }
     }
 
+
+
     override fun getItemCount(): Int {
         // Return the number of items in the dataset
         return songs.size
