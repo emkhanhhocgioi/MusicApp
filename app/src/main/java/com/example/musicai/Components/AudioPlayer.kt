@@ -6,8 +6,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
+import com.example.musicai.ClassProps.CurrentUser
 import com.example.musicai.R
+import com.example.musicai.api.Constant
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.parameter
+import io.ktor.client.request.put
+import io.ktor.client.request.setBody
+import io.ktor.client.utils.EmptyContent.contentType
+import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
+import io.ktor.serialization.gson.gson
+import kotlinx.coroutines.launch
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -17,6 +35,8 @@ class AudioPlayer : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var urlEx: String? = null
+
+    private val baseurl: String = Constant.baseurl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +57,10 @@ class AudioPlayer : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val favorite_button = view.findViewById<View>(R.id.btn_favorite)
+        favorite_button.setOnClickListener {
+
+        }
         val webView = view.findViewById<WebView>(R.id.audio_webview)
         val iframeUrl = urlEx?.let { convertToEmbedUrl(it) }
             ?.let { "$it?autoplay=1" }
@@ -67,6 +91,33 @@ class AudioPlayer : Fragment() {
         return originalUrl
             .replace("https://open.spotify.com/", "https://open.spotify.com/embed/")
             .substringBefore("?")
+    }
+
+    data class SongId(val songId: String)
+
+    suspend fun favoriteSong(songId: String, userId: String) {
+        try {
+            val client = HttpClient(CIO) {
+                install(ContentNegotiation) {
+                    gson()
+                }
+            }
+            val response = client.put("$baseurl/users/favorite/add/$userId") {
+                contentType(ContentType.Application.Json)
+                setBody(SongId(songId))
+            }
+            if (response.status.value == 200) {
+                // Show Toast on main thread
+                activity?.runOnUiThread {
+                    Toast.makeText(requireContext(), "Add to favorite successfully", Toast.LENGTH_SHORT).show()
+                }
+                println("Song favorited successfully")
+            } else {
+                println("Failed to favorite song: ${response.status}")
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 

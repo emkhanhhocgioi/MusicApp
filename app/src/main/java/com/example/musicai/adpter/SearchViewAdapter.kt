@@ -1,12 +1,14 @@
 package com.example.musicai.adpter
 
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.musicai.ClassProps.CurrentUser
 import com.example.musicai.ClassProps.Song
+import com.example.musicai.Components.AudioPlayer.SongId
 import com.example.musicai.R
 import com.example.musicai.api.Constant
 import com.google.android.material.tabs.TabLayout
@@ -15,6 +17,7 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.gson.gson
 import kotlinx.coroutines.launch
@@ -61,9 +64,48 @@ open class SearchViewAdapter(
                     e.printStackTrace()
                 }
             }
+
+            holder.fav_btn.setOnClickListener {
+                scope.launch {
+                    try {
+                        val userId = CurrentUser.id ?: "default_user_id"
+                        favoriteSong(currenSong.id, userId, holder.itemView.context)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        println("Error adding to favorites: ${e.message}")
+                    }
+                }
+            }
         } catch (e: Exception) {
             e.printStackTrace()
             println("Error in binding view holder: ${e.message}")
+        }
+    }
+
+    suspend fun favoriteSong(songId: String, userId: String, context: android.content.Context) {
+        try {
+            val client = HttpClient(CIO) {
+                install(ContentNegotiation) {
+                    gson()
+                }
+            }
+            val response = client.put("$baseurl/spotify/favorite/add/$userId") {
+                contentType(ContentType.Application.Json)
+                setBody(songId) // <-- chỉ truyền chuỗi
+            }
+            if (response.status.value == 200) {
+                // Show Toast on main thread
+                kotlinx.coroutines.Dispatchers.Main.let { mainDispatcher ->
+                    kotlinx.coroutines.withContext(mainDispatcher) {
+                        Toast.makeText(context, "Add to favorite successfully", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                println("Song favorited successfully")
+            } else {
+                println("Failed to favorite song: ${response.status}")
+            }
+        } catch (e: kotlin.Exception) {
+            e.printStackTrace()
         }
     }
 

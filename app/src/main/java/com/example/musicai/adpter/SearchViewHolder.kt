@@ -18,7 +18,7 @@ class SearchViewHolder (itemView: View ) : RecyclerView.ViewHolder(itemView) {
 
     val play_btn : ImageButton = itemView.findViewById<ImageButton>(R.id.buttonPlay)
 
-
+    val fav_btn : ImageButton = itemView.findViewById<ImageButton>(R.id.buttonFavorite)
 
 
 }
