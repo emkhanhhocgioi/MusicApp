@@ -25,7 +25,11 @@ private const val ARG_PARAM2 = "param2"
  * Use the [Searched.newInstance] factory method to
  * create an instance of this fragment.
  */
-class Searched(private val songs: List<Song>,private val setUrl: (String) -> Unit) : Fragment() {
+class Searched(
+    private val songs: List<Song>,
+    private val setUrl: (String) -> Unit,
+    private val setSongid: (String) -> Unit
+) : Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
@@ -60,7 +64,7 @@ class Searched(private val songs: List<Song>,private val setUrl: (String) -> Uni
         lifecycleScope.launch {
             recyclerview = view.findViewById<RecyclerView>(R.id.recyclerViewMusic)
             recyclerview.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false);
-            recyclerview.adapter = SearchViewAdapter(songs,mainTabLayout,setUrl,
+            recyclerview.adapter = SearchViewAdapter(songs,mainTabLayout,setUrl,setSongid,
                 lifecycleScope
             );
         }
@@ -75,10 +79,11 @@ class Searched(private val songs: List<Song>,private val setUrl: (String) -> Uni
     companion object {
 
         @JvmStatic
-        fun newInstance(param1: String, param2: String,songs: List<Song> ,setUrl: Unit) =
+        fun newInstance(param1: String, param2: String,songs: List<Song> ,setUrl: Unit, setSongid: Unit) =
             Searched(
                 songs,
-                {setUrl}
+                {setUrl},
+                {setSongid}
             ).apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)

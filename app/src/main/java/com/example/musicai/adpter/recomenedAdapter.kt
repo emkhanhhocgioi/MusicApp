@@ -8,14 +8,15 @@ import com.bumptech.glide.Glide
 import com.example.musicai.ClassProps.Song
 import com.example.musicai.R
 import com.google.android.material.tabs.TabLayout
-import kotlinx.coroutines.launch
 import java.lang.Exception
 
-class recomenedAdapter(private val songs : List<Song> ,
-                       private val tab: TabLayout,
-                       private val setUrl: (String) -> Unit,
-                       private val scope: LifecycleCoroutineScope
-    ) : RecyclerView.Adapter<recommendViewHolder>() {
+class recomenedAdapter(
+    private val songs: List<Song>,
+    private val tab: TabLayout,
+    private val setUrl: (String) -> Unit,
+    private val setSongid: (String) -> Unit,
+    private val scope: LifecycleCoroutineScope
+) : RecyclerView.Adapter<recommendViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -36,6 +37,9 @@ class recomenedAdapter(private val songs : List<Song> ,
             .into(holder.cover)
         holder.itemView.setOnClickListener {
             try {
+                Currentsong.id?.let {
+                    setSongid(it);
+                }
                 Currentsong.externalUrl?.let {
                     setUrl(it)
                 }

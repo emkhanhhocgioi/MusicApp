@@ -37,7 +37,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment(private val setUrl: (String) -> Unit) : Fragment(R.layout.fragment_home) {
+class HomeFragment(private val setUrl: (String) -> Unit, private val setSongid: (String) -> Unit) : Fragment(R.layout.fragment_home) {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -82,7 +82,7 @@ class HomeFragment(private val setUrl: (String) -> Unit) : Fragment(R.layout.fra
                 lifecycleScope.launch {
                     val songs = getSearchList(query);
                     childFragmentManager.beginTransaction().apply {
-                        replace(R.id.tab_content_wrapper, Searched(songs,setUrl)).commit();
+                        replace(R.id.tab_content_wrapper, Searched(songs,setUrl,setSongid)).commit();
                     }
                 }
 
@@ -96,7 +96,7 @@ class HomeFragment(private val setUrl: (String) -> Unit) : Fragment(R.layout.fra
 
 
         childFragmentManager.beginTransaction().apply {
-            replace(R.id.recomend_trending_frame, recomend(setUrl))
+            replace(R.id.recomend_trending_frame, recomend(setUrl,setSongid))
             commit();
         }
     }
@@ -156,8 +156,8 @@ class HomeFragment(private val setUrl: (String) -> Unit) : Fragment(R.layout.fra
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String,setUrl: Unit) =
-            HomeFragment({ setUrl }).apply {
+        fun newInstance(param1: String, param2: String,setUrl: Unit,setSongid: (String) -> Unit) =
+            HomeFragment({ setUrl }, {setSongid}).apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

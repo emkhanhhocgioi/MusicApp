@@ -2,13 +2,11 @@ package com.example.musicai.adpter
 
 import android.view.LayoutInflater
 import android.widget.Toast
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.musicai.ClassProps.CurrentUser
 import com.example.musicai.ClassProps.Song
-import com.example.musicai.Components.AudioPlayer.SongId
 import com.example.musicai.R
 import com.example.musicai.api.Constant
 import com.google.android.material.tabs.TabLayout
@@ -27,6 +25,7 @@ open class SearchViewAdapter(
     private val songs: List<Song>,
     private val tab: TabLayout,
     private val setUrl: (String) -> Unit,
+    private val setSongid: (String) -> Unit,
     private val scope: LifecycleCoroutineScope
 )  : RecyclerView.Adapter<SearchViewHolder>() {
     private val baseurl : String = Constant.baseurl
@@ -53,6 +52,9 @@ open class SearchViewAdapter(
 
             holder.play_btn.setOnClickListener {
                 try {
+                    currenSong.id?.let {
+                        setSongid(it)
+                    }
                     currenSong.externalUrl?.let {
                         setUrl(it)
                     }

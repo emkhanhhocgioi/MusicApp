@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +12,6 @@ import com.example.musicai.ClassProps.CurrentUser
 import com.example.musicai.ClassProps.Song
 import com.example.musicai.R
 import com.example.musicai.adpter.SearchViewAdapter
-import com.example.musicai.adpter.SongAdapter
 import com.example.musicai.adpter.recomenedAdapter
 import com.example.musicai.api.Constant
 import com.google.android.material.tabs.TabLayout
@@ -39,7 +37,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [recomend.newInstance] factory method to
  * create an instance of this fragment.
  */
-class recomend (private val setUrl: (String) -> Unit) : Fragment() {
+class recomend (private val setUrl: (String) -> Unit,private  val setSongid: (String) -> Unit) : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -91,8 +89,14 @@ class recomend (private val setUrl: (String) -> Unit) : Fragment() {
                     val recomendSongs = getListRecommend();
 
                     songs = recentSongs
-                    recyclerview.adapter = SearchViewAdapter(songs, maintabLayout, setUrl, lifecycleScope)
-                    recyclerview2.adapter = recomenedAdapter(recomendSongs,maintabLayout, setUrl, lifecycleScope);
+                    recyclerview.adapter = SearchViewAdapter(
+                        songs,
+                        maintabLayout,
+                        setUrl,
+                        setSongid,
+                        lifecycleScope
+                    )
+                    recyclerview2.adapter = recomenedAdapter(recomendSongs,maintabLayout, setUrl,setSongid, lifecycleScope);
                 } catch (e: Exception) {
                     e.printStackTrace()
                     println("Error loading songs: ${e.message}")
@@ -170,8 +174,8 @@ class recomend (private val setUrl: (String) -> Unit) : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String, setUrl: (String) -> Unit) =
-            recomend(setUrl).apply {
+        fun newInstance(param1: String, param2: String, setUrl: (String) -> Unit , setSongid: (String) -> Unit) =
+            recomend(setUrl, setSongid).apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

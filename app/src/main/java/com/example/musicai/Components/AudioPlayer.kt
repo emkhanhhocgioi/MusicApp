@@ -31,12 +31,13 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private const val ARG_URL = "url"
 
-class AudioPlayer : Fragment() {
+class AudioPlayer(private val songid : String) : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var urlEx: String? = null
 
     private val baseurl: String = Constant.baseurl
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,21 +59,49 @@ class AudioPlayer : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val favorite_button = view.findViewById<View>(R.id.btn_favorite)
-        favorite_button.setOnClickListener {
 
+
+        favorite_button.setOnClickListener {
+            lifecycleScope.launch {
+                favoriteSong(songid, CurrentUser.id ?: "")
+            }
         }
         val webView = view.findViewById<WebView>(R.id.audio_webview)
         val iframeUrl = urlEx?.let { convertToEmbedUrl(it) }
             ?.let { "$it?autoplay=1" }
             ?: "https://open.spotify.com/embed/track/4nXrVH5xwN1w6TpmP7uu8n?autoplay=1"
-
+        println("external: "+iframeUrl)
         val htmlContent = """
             <html>
-            <body style="margin:0;padding:0;">
+            <head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                <style>
+                    html, body {
+                        height: 100%;
+                        margin: 0;
+                        padding: 0;
+                        background: #121212;
+                    }
+                    body {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 100vh;
+                    }
+                    iframe {
+                        border-radius: 12px;
+                        border: none;
+                        width: 100vw;
+                        max-width: 400px;
+                        height: 352px;
+                        background: #121212;
+                    }
+                </style>
+            </head>
+            <body>
                 <iframe src="$iframeUrl"
-                        width="100%" height="100%" frameborder="0"
-                        allowtransparency="true"
-                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                        allowtransparency="true">
                 </iframe>
             </body>
             </html>
@@ -81,6 +110,7 @@ class AudioPlayer : Fragment() {
         webView.settings.javaScriptEnabled = true
         webView.settings.domStorageEnabled = true
         webView.settings.mediaPlaybackRequiresUserGesture = false
+        webView.setBackgroundColor(0x00000000)
         webView.loadDataWithBaseURL(null, htmlContent, "text/html", "utf-8", null)
         webView.webViewClient = WebViewClient()
     }
@@ -102,9 +132,9 @@ class AudioPlayer : Fragment() {
                     gson()
                 }
             }
-            val response = client.put("$baseurl/users/favorite/add/$userId") {
+            val response = client.put("$baseurl/spotify/favorite/add/$userId") {
                 contentType(ContentType.Application.Json)
-                setBody(SongId(songId))
+                setBody(songId) // <-- chỉ truyền chuỗi
             }
             if (response.status.value == 200) {
                 // Show Toast on main thread
@@ -123,8 +153,8 @@ class AudioPlayer : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, param2: String, url: String) =
-            AudioPlayer().apply {
+        fun newInstance(param1: String, param2: String, url: String,songid : String) =
+            AudioPlayer(songid).apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

@@ -3,20 +3,19 @@ package com.example.musicai.main.home
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.musicai.ClassProps.Song
 import com.example.musicai.Components.AudioPlayer
+import com.example.musicai.Components.Favoutrite
 import com.example.musicai.Components.HomeFragment
 import com.example.musicai.Components.UserDetails
 import com.example.musicai.R
 import com.example.musicai.api.Constant
 import com.google.android.material.tabs.TabLayout
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
 
 class HomeActivity : AppCompatActivity() {
     private val baseurl = Constant.baseurl;
 
     private var currentUrl: String = ""
+    private var currentSongid : String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -25,12 +24,15 @@ class HomeActivity : AppCompatActivity() {
         setTabIcons(tab)
         tab.getTabAt(0)?.select()
         supportFragmentManager.beginTransaction()
-            .replace(R.id.tab_frame, HomeFragment(::setUrl))
+            .replace(R.id.tab_frame, HomeFragment(::setUrl, ::setCurrentSongid))
             .commit()
 
     }
     fun setUrl(newString: String) {
         currentUrl = newString
+    }
+    fun setCurrentSongid(songid: String){
+        currentSongid = songid;
     }
 
 
@@ -45,7 +47,7 @@ class HomeActivity : AppCompatActivity() {
 
 
 
-        val homeFrag = HomeFragment(::setUrl)
+        val homeFrag = HomeFragment(::setUrl, ::setCurrentSongid)
         val userFrag = UserDetails()
 
         tab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -59,10 +61,12 @@ class HomeActivity : AppCompatActivity() {
                             .commit()
                     }
                     1 -> {
-
+                        supportFragmentManager.beginTransaction()
+                            .replace(R.id.tab_frame, Favoutrite(::setUrl))
+                            .commit()
                     }
                     2 -> {
-                        val audioPlayer = AudioPlayer.newInstance("value1", "value2", currentUrl)
+                        val audioPlayer = AudioPlayer.newInstance("value1", "value2", currentUrl, currentSongid )
                         supportFragmentManager.beginTransaction()
                             .replace(R.id.tab_frame, audioPlayer)
                             .commit()
