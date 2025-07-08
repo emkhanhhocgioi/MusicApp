@@ -123,7 +123,7 @@ class AudioPlayer(private val songid : String) : Fragment() {
             .substringBefore("?")
     }
 
-    data class SongId(val songId: String)
+
 
     suspend fun favoriteSong(songId: String, userId: String) {
         try {

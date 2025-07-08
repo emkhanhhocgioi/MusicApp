@@ -15,18 +15,26 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.gson.gson
 import kotlinx.coroutines.launch
 import java.lang.Exception
-import java.util.zip.Inflater
 
-class FavoriteAdapter(private  val songs : List<Song>,
-                      private val tab: TabLayout,
-                      private val setUrl: (String) -> Unit,
-                      private val scope: LifecycleCoroutineScope
+class FavoriteAdapter(
+    private var songs: List<Song>,
+    private val tab: TabLayout,
+    private val setUrl: (String) -> Unit,
+    private val setSongid: (String) -> Unit,
+    private val scope: LifecycleCoroutineScope,
+    private val reloadCallback: (() -> Unit)? = null
+
+
     ) : RecyclerView.Adapter<FavoriteViewHolder>() {
-
+    fun updateSongs(newSongs: List<Song>) {
+        songs = newSongs
+        notifyDataSetChanged()
+    }
         private  val baseurl : String = Constant.baseurl;
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -48,7 +56,10 @@ class FavoriteAdapter(private  val songs : List<Song>,
         holder.song_duration.text = currentSong.duration.toString()
 
         holder.del_btn.setOnClickListener {
-
+            scope.launch {
+                RemoveFromFavourite(currentSong.id ?: "", CurrentUser.id ?: "default_user_id")
+                reloadCallback?.invoke()
+            }
         }
         Glide.with(holder.itemView.context)
             .load(currentSong.coverUrl)
@@ -56,6 +67,9 @@ class FavoriteAdapter(private  val songs : List<Song>,
 
         holder.play_btn.setOnClickListener {
             try {
+                currentSong.id?.let {
+                    setSongid(it)
+                }
                 currentSong.externalUrl.let {
                     setUrl(it)
                 }
@@ -71,6 +85,25 @@ class FavoriteAdapter(private  val songs : List<Song>,
 
 
     }
+    suspend fun RemoveFromFavourite(songid: String, userid: String) {
+        val client = HttpClient(CIO) {
+            install(ContentNegotiation) {
+                gson()
+            }
+        }
+        val response = client.put("$baseurl/users/favorite/remove/${userid}") {
+            contentType(ContentType.Application.Json)
+            setBody(songid)
+
+        }
+        if (response.status.value != 200) {
+            throw Exception("Failed to remove song from favourites: ${response.status}")
+        }else{
+            println("Song removed from favourites successfully")
+
+        }
+    }
+
 
     suspend fun saveUserCurrentSong(songid: String, userid: String = CurrentUser.id ?: "default_user_id") {
         try {

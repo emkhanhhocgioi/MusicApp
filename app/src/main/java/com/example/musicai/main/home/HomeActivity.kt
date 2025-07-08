@@ -62,7 +62,7 @@ class HomeActivity : AppCompatActivity() {
                     }
                     1 -> {
                         supportFragmentManager.beginTransaction()
-                            .replace(R.id.tab_frame, Favoutrite(::setUrl))
+                            .replace(R.id.tab_frame, Favoutrite(::setUrl, ::setCurrentSongid))
                             .commit()
                     }
                     2 -> {

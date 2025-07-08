@@ -5,16 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.musicai.ClassProps.CurrentUser
 import com.example.musicai.ClassProps.Song
 import com.example.musicai.R
 import com.example.musicai.adpter.FavoriteAdapter
-import com.example.musicai.adpter.SearchViewAdapter
-import com.example.musicai.adpter.recomenedAdapter
 import com.example.musicai.api.Constant
 import com.google.android.material.tabs.TabLayout
 import io.ktor.client.HttpClient
@@ -28,8 +24,6 @@ import io.ktor.http.contentType
 import io.ktor.serialization.gson.gson
 import kotlinx.coroutines.launch
 
-
-
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
@@ -41,12 +35,15 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class Favoutrite(
-                 private val setUrl: (String) -> Unit) : Fragment() {
+    private val setUrl: (String) -> Unit,
+    private val setSongid: (String) -> Unit
+) : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
-    private val baseurl : String = Constant.baseurl;
+    private val baseurl: String = Constant.baseurl
+    private var favoriteAdapter: FavoriteAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,18 +63,63 @@ class Favoutrite(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mainTabLayout = requireActivity().findViewById<TabLayout>(R.id.navigate_bar);
-        val favorite_rcv = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.songsRecyclerView)
-        favorite_rcv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false);
+        setupRecyclerView()
+        loadFavoriteSongs()
+    }
 
+    private fun setupRecyclerView() {
+        val favorite_rcv = view?.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.songsRecyclerView)
+        favorite_rcv?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    }
+
+    private fun loadFavoriteSongs() {
         lifecycleScope.launch {
-            val songs = getFavouriteSongs();
-            favorite_rcv.adapter = FavoriteAdapter(songs,mainTabLayout,setUrl,
-                lifecycleScope
-            );
+            try {
+                val songs = getFavouriteSongs()
+                val mainTabLayout = requireActivity().findViewById<TabLayout>(R.id.navigate_bar)
+                val favorite_rcv = view?.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.songsRecyclerView)
+
+                favoriteAdapter = FavoriteAdapter(
+                    songs,
+                    mainTabLayout,
+                    setUrl,
+                    setSongid,
+                    lifecycleScope,
+                    ::reloadFavorites // Pass reload function to adapter
+                )
+                favorite_rcv?.adapter = favoriteAdapter
+            } catch (e: Exception) {
+                // Handle error - you might want to show a toast or error message
+                e.printStackTrace()
+            }
         }
     }
 
+    // Function to reload favorites - can be called from adapter
+    fun reloadFavorites() {
+        lifecycleScope.launch {
+            try {
+                val songs = getFavouriteSongs()
+                favoriteAdapter?.updateSongs(songs)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun loadrecyclerView(songs: List<Song>, mainTabLayout: TabLayout) {
+        val favorite_rcv = view?.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.songsRecyclerView)
+        favorite_rcv?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        favoriteAdapter = FavoriteAdapter(
+            songs,
+            mainTabLayout,
+            setUrl,
+            setSongid,
+            lifecycleScope,
+            ::reloadFavorites
+        )
+        favorite_rcv?.adapter = favoriteAdapter
+    }
 
     suspend fun getFavouriteSongs(): List<Song> {
         val client = HttpClient(CIO) {
@@ -107,8 +149,8 @@ class Favoutrite(
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String, setUrl: (String) -> Unit) =
-            Favoutrite(setUrl).apply {
+        fun newInstance(param1: String, param2: String, setUrl: (String) -> Unit, setSongid: (String) -> Unit) =
+            Favoutrite(setUrl, setSongid).apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
