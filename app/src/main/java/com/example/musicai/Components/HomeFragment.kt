@@ -100,6 +100,10 @@ class HomeFragment(private val setUrl: (String) -> Unit, private val setSongid: 
             commit();
         }
     }
+
+    fun changeBlankwithPercent (query: String): String{
+        return query.replace(" ", "%20")
+    }
     suspend  fun getSearchList( query: String ) : List<Song>
     {
 
@@ -111,7 +115,7 @@ class HomeFragment(private val setUrl: (String) -> Unit, private val setSongid: 
             }
             val response = client.get("$baseurl/spotify/search") {
                 contentType(ContentType.Application.Json)
-                parameter("query", query ?: "")
+                parameter("query", changeBlankwithPercent(query) ?: "")
                 parameter("userid", CurrentUser.id.toString() ?: "")
             }
             if ( response.status == HttpStatusCode.OK ) {
@@ -138,7 +142,7 @@ class HomeFragment(private val setUrl: (String) -> Unit, private val setSongid: 
         return inflater.inflate(R.layout.fragment_home, container, false)
 
 
-        
+
 
     }
 
